@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0c1220"/>
+      <stop offset="100%" stop-color="#090d16"/>
+    </linearGradient>
+    <linearGradient id="cyanPurple" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#38bdf8"/>
+      <stop offset="50%" stop-color="#6366f1"/>
+      <stop offset="100%" stop-color="#a855f7"/>
+    </linearGradient>
+    <linearGradient id="emeraldCyan" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#10b981"/>
+      <stop offset="100%" stop-color="#38bdf8"/>
+    </linearGradient>
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="3" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+  </defs>
+
+  <!-- Background squircle -->
+  <rect x="6" y="6" width="108" height="108" rx="28" fill="url(#bgGrad)" stroke="#1e293b" stroke-width="2"/>
+
+  <!-- Subtle grid lines -->
+  <path d="M 30 60 H 90 M 60 30 V 90" stroke="#1e293b" stroke-width="1.5" stroke-dasharray="3 3"/>
+
+  <!-- Sync Orbital Arrows -->
+  <path d="M 40 38 A 26 26 0 0 1 82 46" fill="none" stroke="url(#cyanPurple)" stroke-width="4.5" stroke-linecap="round" filter="url(#glow)"/>
+  <polyline points="80,38 84,48 74,48" fill="none" stroke="#38bdf8" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <path d="M 80 82 A 26 26 0 0 1 38 74" fill="none" stroke="url(#cyanPurple)" stroke-width="4.5" stroke-linecap="round" filter="url(#glow)"/>
+  <polyline points="40,82 36,72 46,72" fill="none" stroke="#a855f7" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <!-- Vector Delta Nodes -->
+  <circle cx="60" cy="60" r="7" fill="#090d16" stroke="#38bdf8" stroke-width="3"/>
+  <circle cx="60" cy="60" r="3" fill="#38bdf8"/>
+
+  <circle cx="42" cy="46" r="4.5" fill="#090d16" stroke="#10b981" stroke-width="2.5"/>
+  <circle cx="78" cy="74" r="4.5" fill="#090d16" stroke="#a855f7" stroke-width="2.5"/>
+
+  <!-- Connecting Vector Rays -->
+  <line x1="46" y1="48" x2="55" y2="56" stroke="#10b981" stroke-width="2" stroke-dasharray="2 2"/>
+  <line x1="65" y1="64" x2="74" y2="72" stroke="#a855f7" stroke-width="2" stroke-dasharray="2 2"/>
+</svg>

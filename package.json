@@ -1,0 +1,60 @@
+{
+  "name": "vectorsync",
+  "version": "0.1.0",
+  "description": "Incremental CDC synchronization engine between operational databases and vector indices using content-hash delta detection.",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "bin": {
+    "vectorsync": "./bin/vectorsync.js"
+  },
+  "type": "module",
+  "scripts": {
+    "build:ts": "tsc",
+    "build:studio": "vite build --config src/studio/vite.config.ts",
+    "build": "npm run build:ts && npm run build:studio",
+    "dev": "tsx src/cli/index.ts",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "lint": "tsc --noEmit"
+  },
+  "keywords": [
+    "cdc",
+    "vector-database",
+    "embeddings",
+    "rag",
+    "qdrant",
+    "pgvector",
+    "pinecone",
+    "incremental-sync",
+    "content-hash"
+  ],
+  "author": "Alexandr Motologa",
+  "license": "MIT",
+  "dependencies": {
+    "@tailwindcss/vite": "^4.3.3",
+    "better-sqlite3": "^13.0.3",
+    "chokidar": "^5.0.0",
+    "commander": "^15.0.0",
+    "cors": "^2.8.6",
+    "express": "^5.3.0",
+    "lucide-react": "^1.57.0",
+    "ora": "^9.4.1",
+    "picocolors": "^1.1.1",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
+    "tailwindcss": "^4.3.3"
+  },
+  "devDependencies": {
+    "@types/better-sqlite3": "^9.6.0",
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.6",
+    "@types/node": "^26.6.5",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@vitejs/plugin-react": "^6.1.2",
+    "tsx": "^4.23.15",
+    "typescript": "^7.0.2",
+    "vite": "^8.3.4",
+    "vitest": "^5.0.5"
+  }
+}
