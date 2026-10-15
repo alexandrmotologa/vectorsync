@@ -1,45 +1,163 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024">
   <defs>
-    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#0c1220"/>
-      <stop offset="100%" stop-color="#090d16"/>
+    <clipPath id="squircle-clip">
+      <rect x="24" y="24" width="976" height="976" rx="220" />
+    </clipPath>
+
+    <linearGradient id="cyan-glow" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#00f5ff"/>
+      <stop offset="100%" stop-color="#0284c7"/>
     </linearGradient>
-    <linearGradient id="cyanPurple" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#38bdf8"/>
-      <stop offset="50%" stop-color="#6366f1"/>
-      <stop offset="100%" stop-color="#a855f7"/>
+
+    <linearGradient id="cyan-glow-rev" x1="100%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#00f5ff"/>
+      <stop offset="100%" stop-color="#0284c7"/>
     </linearGradient>
-    <linearGradient id="emeraldCyan" x1="0%" y1="0%" x2="100%" y2="0%">
-      <stop offset="0%" stop-color="#10b981"/>
-      <stop offset="100%" stop-color="#38bdf8"/>
+
+    <linearGradient id="amber-accent" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fbbf24"/>
+      <stop offset="100%" stop-color="#ea580c"/>
     </linearGradient>
-    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
-      <feGaussianBlur stdDeviation="3" result="blur" />
-      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+
+    <linearGradient id="slate-chest" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#334155"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+
+    <filter id="subtle-shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="16" stdDeviation="20" flood-color="#000000" flood-opacity="0.14" />
     </filter>
   </defs>
 
-  <!-- Background squircle -->
-  <rect x="6" y="6" width="108" height="108" rx="28" fill="url(#bgGrad)" stroke="#1e293b" stroke-width="2"/>
+  <!-- Luxury White Squircle Container -->
+  <rect x="24" y="24" width="976" height="976" rx="220" fill="#ffffff" stroke="#e2e8f0" stroke-width="6" />
 
-  <!-- Subtle grid lines -->
-  <path d="M 30 60 H 90 M 60 30 V 90" stroke="#1e293b" stroke-width="1.5" stroke-dasharray="3 3"/>
+  <g clip-path="url(#squircle-clip)">
+    <g transform="translate(512, 512)" filter="url(#subtle-shadow)">
 
-  <!-- Sync Orbital Arrows -->
-  <path d="M 40 38 A 26 26 0 0 1 82 46" fill="none" stroke="url(#cyanPurple)" stroke-width="4.5" stroke-linecap="round" filter="url(#glow)"/>
-  <polyline points="80,38 84,48 74,48" fill="none" stroke="#38bdf8" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+      <!-- Hexagonal Architectural Gateway Frame -->
+      <polygon points="
+        0,-390
+        338,-195
+        338,195
+        0,390
+        -338,195
+        -338,-195
+      " fill="none" stroke="#0f172a" stroke-width="40" stroke-linejoin="round" />
 
-  <path d="M 80 82 A 26 26 0 0 1 38 74" fill="none" stroke="url(#cyanPurple)" stroke-width="4.5" stroke-linecap="round" filter="url(#glow)"/>
-  <polyline points="40,82 36,72 46,72" fill="none" stroke="#a855f7" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+      <polygon points="
+        0,-355
+        307,-177
+        307,177
+        0,355
+        -307,177
+        -307,-177
+      " fill="none" stroke="#00f5ff" stroke-width="4" opacity="0.4" stroke-dasharray="16, 12" />
 
-  <!-- Vector Delta Nodes -->
-  <circle cx="60" cy="60" r="7" fill="#090d16" stroke="#38bdf8" stroke-width="3"/>
-  <circle cx="60" cy="60" r="3" fill="#38bdf8"/>
+      <!-- Symmetrical Origami Mascot: Peregrine Delta Falcon (Precision Vector Strike) -->
 
-  <circle cx="42" cy="46" r="4.5" fill="#090d16" stroke="#10b981" stroke-width="2.5"/>
-  <circle cx="78" cy="74" r="4.5" fill="#090d16" stroke="#a855f7" stroke-width="2.5"/>
+      <!-- 1. Watertight Solid Base Silhouette -->
+      <path d="
+        M 0 -290
+        L 75 -245
+        L 125 -275
+        L 115 -180
+        L 220 -80
+        L 230 40
+        L 160 180
+        L 95 270
+        L 0 310
+        L -95 270
+        L -160 180
+        L -230 40
+        L -220 -80
+        L -115 -180
+        L -125 -275
+        L -75 -245
+        Z
+      " fill="#0b0f19" />
 
-  <!-- Connecting Vector Rays -->
-  <line x1="46" y1="48" x2="55" y2="56" stroke="#10b981" stroke-width="2" stroke-dasharray="2 2"/>
-  <line x1="65" y1="64" x2="74" y2="72" stroke="#a855f7" stroke-width="2" stroke-dasharray="2 2"/>
+      <!-- 2. Crest & Brow Facets -->
+      <polygon points="0,-290 75,-245 40,-200 0,-225" fill="#475569" />
+      <polygon points="0,-290 -75,-245 -40,-200 0,-225" fill="#334155" />
+
+      <polygon points="75,-245 125,-275 95,-190 40,-200" fill="#1e293b" />
+      <polygon points="-75,-245 -125,-275 -95,-190 -40,-200" fill="#0f172a" />
+
+      <!-- 3. Forehead & Center Brow Bridge -->
+      <polygon points="0,-225 40,-200 0,-140" fill="#334155" />
+      <polygon points="0,-225 -40,-200 0,-140" fill="#1e293b" />
+
+      <!-- 4. Focused Raptor Eye Sockets & Electric Optics -->
+      <!-- Right Eye Socket -->
+      <polygon points="40,-200 95,-190 100,-130 50,-135" fill="#090d16" stroke="#00f5ff" stroke-width="2" />
+      <!-- Right Glowing Slanted Pupil / Optic -->
+      <polygon points="52,-175 85,-168 76,-150 48,-155" fill="url(#cyan-glow)" />
+
+      <!-- Left Eye Socket -->
+      <polygon points="-40,-200 -95,-190 -100,-130 -50,-135" fill="#090d16" stroke="#00f5ff" stroke-width="2" />
+      <!-- Left Glowing Slanted Pupil / Optic -->
+      <polygon points="-52,-175 -85,-168 -76,-150 -48,-155" fill="url(#cyan-glow-rev)" />
+
+      <!-- 5. Aerodynamic Beak & Strike Tip -->
+      <polygon points="0,-140 32,-135 24,-50 0,-20" fill="#f8fafc" />
+      <polygon points="0,-140 -32,-135 -24,-50 0,-20" fill="#cbd5e1" />
+      <!-- Beak Golden Cutting Edge / Hook -->
+      <polygon points="0,-50 16,-45 0,-10" fill="url(#amber-accent)" />
+      <polygon points="0,-50 -16,-45 0,-10" fill="#b45309" />
+
+      <!-- 6. Temporal & Malar Cheeks -->
+      <polygon points="95,-190 115,-180 140,-105 100,-130" fill="#334155" />
+      <polygon points="-95,-190 -115,-180 -140,-105 -100,-130" fill="#1e293b" />
+
+      <polygon points="100,-130 140,-105 120,-30 45,-80" fill="#1e293b" />
+      <polygon points="-100,-130 -140,-105 -120,-30 -45,-80" fill="#0f172a" />
+
+      <polygon points="32,-135 45,-80 0,-20" fill="#475569" />
+      <polygon points="-32,-135 -45,-80 0,-20" fill="#334155" />
+
+      <!-- 7. Delta Vector Wings (Folded High-Precision Aerofoils) -->
+      <!-- Right Wing Top & Middle Struts -->
+      <polygon points="115,-180 220,-80 180,-20 140,-105" fill="#334155" />
+      <polygon points="-115,-180 -220,-80 -180,-20 -140,-105" fill="#1e293b" />
+
+      <polygon points="220,-80 230,40 160,50 180,-20" fill="#1e293b" />
+      <polygon points="-220,-80 -230,40 -160,50 -180,-20" fill="#0f172a" />
+
+      <polygon points="230,40 160,180 120,120 160,50" fill="#0f172a" />
+      <polygon points="-230,40 -160,180 -120,120 -160,50" fill="#090d16" />
+
+      <!-- Wing Vector Coordinate Edge Lines -->
+      <line x1="180" y1="-20" x2="230" y2="40" stroke="#00f5ff" stroke-width="3" stroke-linecap="round" />
+      <line x1="-180" y1="-20" x2="-230" y2="40" stroke="#00f5ff" stroke-width="3" stroke-linecap="round" />
+
+      <!-- 8. Geometric Breastplate & Delta Hash Core -->
+      <polygon points="0,-20 60,30 0,110 -60,30" fill="#0f172a" stroke="#1e293b" stroke-width="2" />
+      <!-- Central Delta Diamond (Cyan Vector Node) -->
+      <polygon points="0,0 30,35 0,75 -30,35" fill="url(#cyan-glow)" />
+
+      <!-- Outer Chest Facets -->
+      <polygon points="45,-80 120,-30 80,40 60,30 0,-20" fill="#334155" />
+      <polygon points="-45,-80 -120,-30 -80,40 -60,30 0,-20" fill="#1e293b" />
+
+      <polygon points="60,30 80,40 70,140 0,110" fill="#1e293b" />
+      <polygon points="-60,30 -80,40 -70,140 0,110" fill="#0f172a" />
+
+      <polygon points="80,40 160,50 120,120 70,140" fill="#475569" />
+      <polygon points="-80,40 -160,50 -120,120 -70,140" fill="#334155" />
+
+      <!-- Lower Plumes / Tail Keel -->
+      <polygon points="0,110 70,140 50,220 0,250" fill="#1e293b" />
+      <polygon points="0,110 -70,140 -50,220 0,250" fill="#0f172a" />
+
+      <polygon points="70,140 120,120 95,210 50,220" fill="#334155" />
+      <polygon points="-70,140 -120,120 -95,210 -50,220" fill="#1e293b" />
+
+      <polygon points="0,250 50,220 35,285 0,310" fill="#0f172a" />
+      <polygon points="0,250 -50,220 -35,285 0,310" fill="#090d16" />
+
+      <!-- Subtle Precision Ray from Core -->
+      <circle cx="0" cy="35" r="5" fill="#ffffff" />
+    </g>
+  </g>
 </svg>

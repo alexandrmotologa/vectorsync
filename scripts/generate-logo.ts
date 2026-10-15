@@ -1,0 +1,195 @@
+import fs from 'node:fs';
+import path from 'node:path';
+import { Resvg } from '@resvg/resvg-js';
+
+function buildVectorSyncLogoSvg(): string {
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024">
+  <defs>
+    <clipPath id="squircle-clip">
+      <rect x="24" y="24" width="976" height="976" rx="220" />
+    </clipPath>
+
+    <linearGradient id="cyan-glow" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#00f5ff"/>
+      <stop offset="100%" stop-color="#0284c7"/>
+    </linearGradient>
+
+    <linearGradient id="cyan-glow-rev" x1="100%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#00f5ff"/>
+      <stop offset="100%" stop-color="#0284c7"/>
+    </linearGradient>
+
+    <linearGradient id="amber-accent" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fbbf24"/>
+      <stop offset="100%" stop-color="#ea580c"/>
+    </linearGradient>
+
+    <linearGradient id="slate-chest" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#334155"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+
+    <filter id="subtle-shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="16" stdDeviation="20" flood-color="#000000" flood-opacity="0.14" />
+    </filter>
+  </defs>
+
+  <!-- Luxury White Squircle Container -->
+  <rect x="24" y="24" width="976" height="976" rx="220" fill="#ffffff" stroke="#e2e8f0" stroke-width="6" />
+
+  <g clip-path="url(#squircle-clip)">
+    <g transform="translate(512, 512)" filter="url(#subtle-shadow)">
+
+      <!-- Hexagonal Architectural Gateway Frame -->
+      <polygon points="
+        0,-390
+        338,-195
+        338,195
+        0,390
+        -338,195
+        -338,-195
+      " fill="none" stroke="#0f172a" stroke-width="40" stroke-linejoin="round" />
+
+      <polygon points="
+        0,-355
+        307,-177
+        307,177
+        0,355
+        -307,177
+        -307,-177
+      " fill="none" stroke="#00f5ff" stroke-width="4" opacity="0.4" stroke-dasharray="16, 12" />
+
+      <!-- Symmetrical Origami Mascot: Peregrine Delta Falcon (Precision Vector Strike) -->
+
+      <!-- 1. Watertight Solid Base Silhouette -->
+      <path d="
+        M 0 -290
+        L 75 -245
+        L 125 -275
+        L 115 -180
+        L 220 -80
+        L 230 40
+        L 160 180
+        L 95 270
+        L 0 310
+        L -95 270
+        L -160 180
+        L -230 40
+        L -220 -80
+        L -115 -180
+        L -125 -275
+        L -75 -245
+        Z
+      " fill="#0b0f19" />
+
+      <!-- 2. Crest & Brow Facets -->
+      <polygon points="0,-290 75,-245 40,-200 0,-225" fill="#475569" />
+      <polygon points="0,-290 -75,-245 -40,-200 0,-225" fill="#334155" />
+
+      <polygon points="75,-245 125,-275 95,-190 40,-200" fill="#1e293b" />
+      <polygon points="-75,-245 -125,-275 -95,-190 -40,-200" fill="#0f172a" />
+
+      <!-- 3. Forehead & Center Brow Bridge -->
+      <polygon points="0,-225 40,-200 0,-140" fill="#334155" />
+      <polygon points="0,-225 -40,-200 0,-140" fill="#1e293b" />
+
+      <!-- 4. Focused Raptor Eye Sockets & Electric Optics -->
+      <!-- Right Eye Socket -->
+      <polygon points="40,-200 95,-190 100,-130 50,-135" fill="#090d16" stroke="#00f5ff" stroke-width="2" />
+      <!-- Right Glowing Slanted Pupil / Optic -->
+      <polygon points="52,-175 85,-168 76,-150 48,-155" fill="url(#cyan-glow)" />
+
+      <!-- Left Eye Socket -->
+      <polygon points="-40,-200 -95,-190 -100,-130 -50,-135" fill="#090d16" stroke="#00f5ff" stroke-width="2" />
+      <!-- Left Glowing Slanted Pupil / Optic -->
+      <polygon points="-52,-175 -85,-168 -76,-150 -48,-155" fill="url(#cyan-glow-rev)" />
+
+      <!-- 5. Aerodynamic Beak & Strike Tip -->
+      <polygon points="0,-140 32,-135 24,-50 0,-20" fill="#f8fafc" />
+      <polygon points="0,-140 -32,-135 -24,-50 0,-20" fill="#cbd5e1" />
+      <!-- Beak Golden Cutting Edge / Hook -->
+      <polygon points="0,-50 16,-45 0,-10" fill="url(#amber-accent)" />
+      <polygon points="0,-50 -16,-45 0,-10" fill="#b45309" />
+
+      <!-- 6. Temporal & Malar Cheeks -->
+      <polygon points="95,-190 115,-180 140,-105 100,-130" fill="#334155" />
+      <polygon points="-95,-190 -115,-180 -140,-105 -100,-130" fill="#1e293b" />
+
+      <polygon points="100,-130 140,-105 120,-30 45,-80" fill="#1e293b" />
+      <polygon points="-100,-130 -140,-105 -120,-30 -45,-80" fill="#0f172a" />
+
+      <polygon points="32,-135 45,-80 0,-20" fill="#475569" />
+      <polygon points="-32,-135 -45,-80 0,-20" fill="#334155" />
+
+      <!-- 7. Delta Vector Wings (Folded High-Precision Aerofoils) -->
+      <!-- Right Wing Top & Middle Struts -->
+      <polygon points="115,-180 220,-80 180,-20 140,-105" fill="#334155" />
+      <polygon points="-115,-180 -220,-80 -180,-20 -140,-105" fill="#1e293b" />
+
+      <polygon points="220,-80 230,40 160,50 180,-20" fill="#1e293b" />
+      <polygon points="-220,-80 -230,40 -160,50 -180,-20" fill="#0f172a" />
+
+      <polygon points="230,40 160,180 120,120 160,50" fill="#0f172a" />
+      <polygon points="-230,40 -160,180 -120,120 -160,50" fill="#090d16" />
+
+      <!-- Wing Vector Coordinate Edge Lines -->
+      <line x1="180" y1="-20" x2="230" y2="40" stroke="#00f5ff" stroke-width="3" stroke-linecap="round" />
+      <line x1="-180" y1="-20" x2="-230" y2="40" stroke="#00f5ff" stroke-width="3" stroke-linecap="round" />
+
+      <!-- 8. Geometric Breastplate & Delta Hash Core -->
+      <polygon points="0,-20 60,30 0,110 -60,30" fill="#0f172a" stroke="#1e293b" stroke-width="2" />
+      <!-- Central Delta Diamond (Cyan Vector Node) -->
+      <polygon points="0,0 30,35 0,75 -30,35" fill="url(#cyan-glow)" />
+
+      <!-- Outer Chest Facets -->
+      <polygon points="45,-80 120,-30 80,40 60,30 0,-20" fill="#334155" />
+      <polygon points="-45,-80 -120,-30 -80,40 -60,30 0,-20" fill="#1e293b" />
+
+      <polygon points="60,30 80,40 70,140 0,110" fill="#1e293b" />
+      <polygon points="-60,30 -80,40 -70,140 0,110" fill="#0f172a" />
+
+      <polygon points="80,40 160,50 120,120 70,140" fill="#475569" />
+      <polygon points="-80,40 -160,50 -120,120 -70,140" fill="#334155" />
+
+      <!-- Lower Plumes / Tail Keel -->
+      <polygon points="0,110 70,140 50,220 0,250" fill="#1e293b" />
+      <polygon points="0,110 -70,140 -50,220 0,250" fill="#0f172a" />
+
+      <polygon points="70,140 120,120 95,210 50,220" fill="#334155" />
+      <polygon points="-70,140 -120,120 -95,210 -50,220" fill="#1e293b" />
+
+      <polygon points="0,250 50,220 35,285 0,310" fill="#0f172a" />
+      <polygon points="0,250 -50,220 -35,285 0,310" fill="#090d16" />
+
+      <!-- Subtle Precision Ray from Core -->
+      <circle cx="0" cy="35" r="5" fill="#ffffff" />
+    </g>
+  </g>
+</svg>`;
+}
+
+async function main() {
+  const svg = buildVectorSyncLogoSvg();
+  const outSvgPath = path.resolve('docs/images/logo.svg');
+  const outPngPath = path.resolve('docs/images/logo.png');
+
+  fs.writeFileSync(outSvgPath, svg, 'utf8');
+  console.log(`Saved SVG to ${outSvgPath}`);
+
+  const resvg = new Resvg(svg, {
+    fitTo: {
+      mode: 'width',
+      value: 1024,
+    },
+  });
+
+  const pngData = resvg.render();
+  const pngBuffer = pngData.asPng();
+  fs.writeFileSync(outPngPath, pngBuffer);
+  console.log(`Rendered PNG (1024x1024) to ${outPngPath}`);
+}
+
+main().catch((err) => {
+  console.error(err);
+  process.exit(1);
+});

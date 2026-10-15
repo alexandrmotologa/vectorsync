@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="docs/images/logo.svg" width="96" height="96" alt="VectorSync Logo" />
+  <img src="docs/images/logo.png" width="128" height="128" alt="VectorSync Logo" />
 </p>
 
 <h1 align="center">VectorSync</h1>
@@ -45,6 +45,22 @@ VectorSync includes an embedded React 19 visual studio that connects to the engi
 
 <p align="center">
   <img src="docs/images/vectorsync-dashboard.png" alt="VectorSync Studio Dashboard" width="850" />
+</p>
+
+### Semantic Search & Vector Retrieval Test Bench
+
+Inspect semantic retrieval results and real-time cosine similarity scores against active vector sinks:
+
+<p align="center">
+  <img src="docs/images/vectorsync-search.png" alt="VectorSync Semantic Search Test Bench" width="850" />
+</p>
+
+### Responsive Across Devices
+
+The studio layout adapts fluidly across desktop workstations, tablets, and mobile devices:
+
+<p align="center">
+  <img src="docs/images/vectorsync-mobile.png" alt="VectorSync Studio Mobile Responsive View" width="360" />
 </p>
 
 ---

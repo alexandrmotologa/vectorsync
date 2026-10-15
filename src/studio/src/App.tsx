@@ -114,31 +114,48 @@ export const App: React.FC = () => {
   return (
     <div className="min-h-screen bg-[#090d16] text-slate-100 flex flex-col">
       {/* Top Navigation Bar */}
-      <header className="border-b border-slate-800 bg-[#0c1220]/80 backdrop-blur sticky top-0 z-50 px-6 py-3.5 flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-cyan-600 via-indigo-600 to-purple-600 flex items-center justify-center shadow-lg shadow-cyan-500/20">
-            <ArrowRightLeft className="w-5 h-5 text-white" />
-          </div>
-          <div>
-            <div className="flex items-center gap-2">
-              <h1 className="text-base font-extrabold tracking-tight text-white font-mono">
-                VectorSync Studio
-              </h1>
-              <span className="px-2 py-0.5 text-[10px] font-mono font-bold tracking-wide rounded-md bg-cyan-950 text-cyan-400 border border-cyan-800">
-                v0.1.0 CDC
-              </span>
+      <header className="border-b border-slate-800 bg-[#0c1220]/80 backdrop-blur sticky top-0 z-50 px-4 md:px-6 py-3 flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3">
+        <div className="flex items-center justify-between md:justify-start gap-3">
+          <div className="flex items-center gap-3">
+            <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-cyan-600 via-indigo-600 to-purple-600 flex items-center justify-center shadow-lg shadow-cyan-500/20 shrink-0">
+              <ArrowRightLeft className="w-5 h-5 text-white" />
             </div>
-            <p className="text-[11px] text-slate-400">
-              Incremental Vector CDC & Content-Hash Ingestion Engine
-            </p>
+            <div>
+              <div className="flex items-center gap-2">
+                <h1 className="text-base font-extrabold tracking-tight text-white font-mono">
+                  VectorSync Studio
+                </h1>
+                <span className="px-2 py-0.5 text-[10px] font-mono font-bold tracking-wide rounded-md bg-cyan-950 text-cyan-400 border border-cyan-800">
+                  v0.1.0 CDC
+                </span>
+              </div>
+              <p className="text-[11px] text-slate-400 hidden sm:block">
+                Incremental Vector CDC & Content-Hash Ingestion Engine
+              </p>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-2 md:hidden">
+            <button
+              onClick={reloadAll}
+              title="Refresh Ledger and Stats"
+              className="p-1.5 rounded-lg bg-slate-900 border border-slate-800 text-slate-400 hover:text-slate-200"
+            >
+              <RefreshCw className="w-3.5 h-3.5" />
+            </button>
+            <span
+              className={`w-2 h-2 rounded-full ${
+                isConnected ? 'bg-emerald-400 animate-ping' : 'bg-rose-500'
+              }`}
+            />
           </div>
         </div>
 
         {/* Navigation Tabs */}
-        <div className="flex items-center gap-1 bg-slate-900/80 p-1 rounded-xl border border-slate-800">
+        <div className="flex items-center gap-1 bg-slate-900/80 p-1 rounded-xl border border-slate-800 overflow-x-auto no-scrollbar shrink-0">
           <button
             onClick={() => setActiveTab('overview')}
-            className={`flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-semibold transition ${
+            className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition ${
               activeTab === 'overview'
                 ? 'bg-cyan-600 text-white shadow-md'
                 : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/50'
@@ -149,7 +166,7 @@ export const App: React.FC = () => {
           </button>
           <button
             onClick={() => setActiveTab('sandbox')}
-            className={`flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-semibold transition ${
+            className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition ${
               activeTab === 'sandbox'
                 ? 'bg-cyan-600 text-white shadow-md'
                 : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/50'
@@ -160,7 +177,7 @@ export const App: React.FC = () => {
           </button>
           <button
             onClick={() => setActiveTab('search')}
-            className={`flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-semibold transition ${
+            className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition ${
               activeTab === 'search'
                 ? 'bg-cyan-600 text-white shadow-md'
                 : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/50'
@@ -171,7 +188,7 @@ export const App: React.FC = () => {
           </button>
           <button
             onClick={() => setActiveTab('ledger')}
-            className={`flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-semibold transition ${
+            className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition ${
               activeTab === 'ledger'
                 ? 'bg-cyan-600 text-white shadow-md'
                 : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/50'
@@ -182,7 +199,7 @@ export const App: React.FC = () => {
           </button>
         </div>
 
-        <div className="flex items-center gap-3">
+        <div className="hidden md:flex items-center gap-3">
           <button
             onClick={reloadAll}
             title="Refresh Ledger and Stats"

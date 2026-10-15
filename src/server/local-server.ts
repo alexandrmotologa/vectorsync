@@ -250,7 +250,36 @@ export class LocalServer {
 </html>`;
   }
 
+  public async primeMemorySink(): Promise<void> {
+    if (this.pipeline.sink.sinkName === 'in-memory') {
+      const docs = this.pipeline.ledger.getAllDocuments();
+      const chunks = docs.flatMap((d) => this.pipeline.ledger.getChunksForDocument(d.id));
+      if (chunks.length > 0) {
+        const vectorItems = [];
+        for (const chunk of chunks) {
+          const vectors = await this.pipeline.embeddingProvider.embed([chunk.id]);
+          let sectionArr: string[] = [];
+          try {
+            sectionArr = JSON.parse(chunk.sectionPath);
+          } catch {}
+          vectorItems.push({
+            chunkId: chunk.id,
+            vector: vectors[0],
+            metadata: {
+              documentId: chunk.documentId,
+              chunkIndex: chunk.chunkIndex,
+              contentHash: chunk.contentHash,
+              section: sectionArr.join(' > ') || chunk.id,
+            },
+          });
+        }
+        await this.pipeline.sink.upsertChunks(vectorItems);
+      }
+    }
+  }
+
   public async start(): Promise<number> {
+    await this.primeMemorySink();
     return new Promise((resolve) => {
       this.server = this.app.listen(this.port, () => {
         resolve(this.port);
