@@ -7,6 +7,12 @@
   "bin": {
     "vectorsync": "./bin/vectorsync.js"
   },
+  "files": [
+    "dist",
+    "bin",
+    "README.md",
+    "LICENSE"
+  ],
   "type": "module",
   "scripts": {
     "build:ts": "tsc",
