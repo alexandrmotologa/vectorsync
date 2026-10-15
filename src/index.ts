@@ -1,16 +1,22 @@
 export * from './types/index.js';
 export { HashChunker } from './core/chunker/hash-chunker.js';
+export { StructuralChunker, type StructuralChunkerOptions } from './core/chunker/structural-chunker.js';
 export { StateLedger } from './core/delta/ledger.js';
 export { DiffCalculator } from './core/delta/diff-calculator.js';
 export { CostCalculator, EMBEDDING_MODELS } from './core/telemetry/cost-calculator.js';
 export { SyncPipeline, type SyncPipelineOptions, type SyncResult } from './core/sync/sync-pipeline.js';
+export { MutationDlq, type DlqItem } from './core/sync/dlq.js';
+export { LedgerReconciler, type ReconciliationReport, type LedgerExportPayload } from './core/sync/reconciler.js';
 export { MockEmbeddingProvider } from './core/embeddings/mock-provider.js';
 export { OpenAIEmbeddingProvider, type OpenAIOptions } from './core/embeddings/openai-provider.js';
+export { LocalEmbeddingProvider, type LocalEmbeddingOptions } from './core/embeddings/local-provider.js';
 export type { EmbeddingProvider } from './core/embeddings/base.js';
 export type { VectorSink, VectorItem, VectorSearchResult, VectorSinkStats } from './sinks/base.js';
 export { MemoryVectorSink } from './sinks/memory-sink.js';
 export { QdrantVectorSink, type QdrantOptions } from './sinks/qdrant-sink.js';
 export { PgVectorSink, type PgVectorOptions } from './sinks/pgvector-sink.js';
+export { PineconeVectorSink, type PineconeOptions } from './sinks/pinecone-sink.js';
 export { FilesystemWatcher, type WatcherOptions } from './sources/filesystem-watcher.js';
 export { WebhookReceiver, type WebhookOptions } from './sources/webhook-receiver.js';
 export { LocalServer, type ServerOptions } from './server/local-server.js';
+

@@ -46,6 +46,15 @@ export class StateLedger {
       CREATE INDEX IF NOT EXISTS idx_chunks_doc ON chunks(document_id);
       CREATE INDEX IF NOT EXISTS idx_chunks_hash ON chunks(content_hash);
 
+      CREATE TABLE IF NOT EXISTS global_chunk_hashes (
+        content_hash TEXT PRIMARY KEY,
+        canonical_chunk_id TEXT NOT NULL,
+        document_id TEXT NOT NULL,
+        token_count INTEGER NOT NULL,
+        reference_count INTEGER NOT NULL DEFAULT 1,
+        created_at INTEGER NOT NULL
+      );
+
       CREATE TABLE IF NOT EXISTS sync_audit_log (
         id TEXT PRIMARY KEY,
         timestamp INTEGER NOT NULL,
@@ -137,6 +146,25 @@ export class StateLedger {
     }));
   }
 
+  public findGlobalChunk(contentHash: string): {
+    contentHash: string;
+    canonicalChunkId: string;
+    documentId: string;
+    tokenCount: number;
+  } | null {
+    const stmt = this.db.prepare(
+      'SELECT content_hash, canonical_chunk_id, document_id, token_count FROM global_chunk_hashes WHERE content_hash = ?'
+    );
+    const row = stmt.get(contentHash) as any;
+    if (!row) return null;
+    return {
+      contentHash: row.content_hash,
+      canonicalChunkId: row.canonical_chunk_id,
+      documentId: row.document_id,
+      tokenCount: row.token_count,
+    };
+  }
+
   /**
    * Atomically commits a completed SyncPlan and the associated chunks to the ledger.
    */
@@ -193,6 +221,14 @@ export class StateLedger {
             updated_at = excluded.updated_at
         `);
 
+        const upsertGlobalStmt = this.db.prepare(`
+          INSERT INTO global_chunk_hashes (
+            content_hash, canonical_chunk_id, document_id, token_count, reference_count, created_at
+          ) VALUES (?, ?, ?, ?, 1, ?)
+          ON CONFLICT(content_hash) DO UPDATE SET
+            reference_count = reference_count + 1
+        `);
+
         for (const chunk of chunks) {
           upsertChunkStmt.run(
             chunk.chunkId,
@@ -204,6 +240,14 @@ export class StateLedger {
             chunk.tokenCount,
             JSON.stringify(chunk.sectionPath ?? []),
             now,
+            now
+          );
+
+          upsertGlobalStmt.run(
+            chunk.contentHash,
+            chunk.chunkId,
+            plan.documentId,
+            chunk.tokenCount,
             now
           );
         }

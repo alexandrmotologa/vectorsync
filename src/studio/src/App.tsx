@@ -7,15 +7,17 @@ import {
   ArrowRightLeft,
   X,
   RefreshCw,
+  Search,
 } from 'lucide-react';
 import { CostSavingsCard } from './components/CostSavingsCard';
 import { SyncLagIndicator } from './components/SyncLagIndicator';
 import { LedgerTable, type LedgerDoc } from './components/LedgerTable';
 import { InteractiveSandbox } from './components/InteractiveSandbox';
 import { DocumentDiffViewer } from './components/DocumentDiffViewer';
+import { SearchPlayground } from './components/SearchPlayground';
 
 export const App: React.FC = () => {
-  const [activeTab, setActiveTab] = useState<'overview' | 'sandbox' | 'ledger'>('overview');
+  const [activeTab, setActiveTab] = useState<'overview' | 'sandbox' | 'search' | 'ledger'>('overview');
   const [stats, setStats] = useState({
     ledger: {
       totalDocuments: 0,
@@ -157,6 +159,17 @@ export const App: React.FC = () => {
             Interactive Sandbox
           </button>
           <button
+            onClick={() => setActiveTab('search')}
+            className={`flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-semibold transition ${
+              activeTab === 'search'
+                ? 'bg-cyan-600 text-white shadow-md'
+                : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/50'
+            }`}
+          >
+            <Search className="w-3.5 h-3.5" />
+            Search Test Bench
+          </button>
+          <button
             onClick={() => setActiveTab('ledger')}
             className={`flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-semibold transition ${
               activeTab === 'ledger'
@@ -235,7 +248,12 @@ export const App: React.FC = () => {
           <InteractiveSandbox onSyncCompleted={reloadAll} />
         )}
 
-        {/* Tab 3: State Ledger */}
+        {/* Tab 3: Semantic Search Test Bench */}
+        {activeTab === 'search' && (
+          <SearchPlayground />
+        )}
+
+        {/* Tab 4: State Ledger */}
         {activeTab === 'ledger' && (
           <div className="space-y-6">
             <LedgerTable

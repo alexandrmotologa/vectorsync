@@ -23,7 +23,8 @@ export type SyncActionType =
   | 'SKIP' 
   | 'UPDATE_METADATA_ONLY' 
   | 'UPSERT_TEXT_CHANGED' 
-  | 'DELETE_ORPHAN';
+  | 'DELETE_ORPHAN'
+  | 'REUSE_CROSS_DOC';
 
 export interface ChunkAction {
   type: SyncActionType;
@@ -31,6 +32,7 @@ export interface ChunkAction {
   chunkIndex?: number;
   content?: string;
   contentHash?: string;
+  canonicalVectorId?: string;
   metadata?: Record<string, unknown>;
   reason: string;
   tokenCount?: number;
@@ -46,6 +48,7 @@ export interface SyncPlan {
   toUpdateMetadataOnlyCount: number;
   toDeleteChunkIds: string[];
   skippedUnchangedCount: number;
+  crossDocReusedCount: number;
   tokensSaved: number;
   tokensRequired: number;
   estimatedCostSavingsUsd: number;

@@ -115,6 +115,30 @@ export class LocalServer {
       }
     });
 
+    // Semantic Vector Search endpoint
+    this.app.post('/api/search', async (req, res) => {
+      try {
+        const { query, topK = 5, filter } = req.body;
+        if (!query) {
+          res.status(400).json({ error: 'query string is required' });
+          return;
+        }
+
+        const vectors = await this.pipeline.embeddingProvider.embed([String(query)]);
+        const results = await this.pipeline.sink.query(vectors[0], Number(topK), filter);
+
+        res.json({
+          query,
+          count: results.length,
+          sink: this.pipeline.sink.sinkName,
+          model: this.pipeline.embeddingProvider.name,
+          results,
+        });
+      } catch (err: any) {
+        res.status(500).json({ error: err.message });
+      }
+    });
+
     // Real-time Server-Sent Events (SSE)
     this.app.get('/api/events', (req: Request, res: Response) => {
       res.setHeader('Content-Type', 'text/event-stream');

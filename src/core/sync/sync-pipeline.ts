@@ -89,6 +89,37 @@ export class SyncPipeline extends EventEmitter {
           await this.sink.updateMetadata(action.chunkId, action.metadata!);
         }
 
+        // Step 3b: Handle cross-document deduplicated chunks (reuse vector from canonical chunk)
+        const crossDocActions = plan.actions.filter(
+          (a) => a.type === 'REUSE_CROSS_DOC'
+        );
+        if (crossDocActions.length > 0 && typeof (this.sink as any).getItem === 'function') {
+          const reusedItems = crossDocActions
+            .map((action) => {
+              const existingItem = (this.sink as any).getItem(action.canonicalVectorId);
+              if (existingItem) {
+                return {
+                  chunkId: action.chunkId,
+                  vector: existingItem.vector,
+                  metadata: {
+                    ...(action.metadata ?? {}),
+                    chunkIndex: action.chunkIndex,
+                    documentId: mutation.documentId,
+                    contentHash: action.contentHash,
+                    reusedFrom: action.canonicalVectorId,
+                    text: action.content,
+                  },
+                };
+              }
+              return null;
+            })
+            .filter((item): item is NonNullable<typeof item> => item !== null);
+
+          if (reusedItems.length > 0) {
+            await this.sink.upsertChunks(reusedItems);
+          }
+        }
+
         // Step 4: Re-embed and upsert ONLY text-changed / newly-inserted chunks
         const changedActions = plan.actions.filter(
           (a) => a.type === 'UPSERT_TEXT_CHANGED' && a.content
@@ -148,6 +179,7 @@ export class SyncPipeline extends EventEmitter {
           toUpdateMetadataOnlyCount: 0,
           toDeleteChunkIds: [],
           skippedUnchangedCount: 0,
+          crossDocReusedCount: 0,
           tokensSaved: 0,
           tokensRequired: 0,
           estimatedCostSavingsUsd: 0,

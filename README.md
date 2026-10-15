@@ -176,10 +176,49 @@ vectorsync listen --source filesystem --dir ./docs
 vectorsync listen --source webhook --port 50091
 ```
 
-### 4. Check Ledger Status
+### 4. Check Ledger Status & Ingestion Health
 
 ```bash
 vectorsync status
+```
+
+### 5. Audit Consistency & Repair Drift
+
+Compare the SQLite state ledger against the vector sink to detect missing or phantom vectors and restore parity:
+
+```bash
+# Dry run audit
+vectorsync reconcile
+
+# Repair detected drift automatically
+vectorsync reconcile --repair
+```
+
+### 6. Manage Dead-Letter Queue (DLQ)
+
+Inspect and retry mutations that encountered transient vector database failures:
+
+```bash
+# View pending failed mutations
+vectorsync dlq list
+
+# Reprocess pending mutations through the sync pipeline
+vectorsync dlq process
+
+# Purge resolved entries
+vectorsync dlq purge
+```
+
+### 7. Export and Import Ledger State
+
+Export state to portable JSON for backup or migration across ledger environments:
+
+```bash
+# Export
+vectorsync export backup.json
+
+# Import
+vectorsync import backup.json
 ```
 
 ---

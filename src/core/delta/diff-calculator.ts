@@ -50,6 +50,7 @@ export class DiffCalculator {
         toUpdateMetadataOnlyCount: 0,
         toDeleteChunkIds: existingChunks.map((c) => c.id),
         skippedUnchangedCount: 0,
+        crossDocReusedCount: 0,
         tokensSaved: 0,
         tokensRequired: 0,
         estimatedCostSavingsUsd: 0,
@@ -65,6 +66,7 @@ export class DiffCalculator {
     let toUpdateTextCount = 0;
     let toUpdateMetadataOnlyCount = 0;
     let skippedUnchangedCount = 0;
+    let crossDocReusedCount = 0;
     let tokensSaved = 0;
     let tokensRequired = 0;
 
@@ -73,19 +75,37 @@ export class DiffCalculator {
       const existing = existingMap.get(chunk.chunkId);
 
       if (!existing) {
-        // Chunk is newly added
-        actions.push({
-          type: 'UPSERT_TEXT_CHANGED',
-          chunkId: chunk.chunkId,
-          chunkIndex: chunk.chunkIndex,
-          content: chunk.content,
-          contentHash: chunk.contentHash,
-          metadata: chunk.metadata,
-          reason: 'New chunk created',
-          tokenCount: chunk.tokenCount,
-        });
-        toInsertCount++;
-        tokensRequired += chunk.tokenCount;
+        // Check for cross-document deduplication
+        const globalMatch = ledger.findGlobalChunk(chunk.contentHash);
+        if (globalMatch) {
+          actions.push({
+            type: 'REUSE_CROSS_DOC',
+            chunkId: chunk.chunkId,
+            chunkIndex: chunk.chunkIndex,
+            content: chunk.content,
+            contentHash: chunk.contentHash,
+            canonicalVectorId: globalMatch.canonicalChunkId,
+            metadata: chunk.metadata,
+            reason: `Identical text found in '${globalMatch.documentId}', vector reused ($0 spent)`,
+            tokenCount: chunk.tokenCount,
+          });
+          crossDocReusedCount++;
+          tokensSaved += chunk.tokenCount;
+        } else {
+          // Chunk is newly added
+          actions.push({
+            type: 'UPSERT_TEXT_CHANGED',
+            chunkId: chunk.chunkId,
+            chunkIndex: chunk.chunkIndex,
+            content: chunk.content,
+            contentHash: chunk.contentHash,
+            metadata: chunk.metadata,
+            reason: 'New chunk created',
+            tokenCount: chunk.tokenCount,
+          });
+          toInsertCount++;
+          tokensRequired += chunk.tokenCount;
+        }
       } else {
         // Chunk existed previously
         if (existing.contentHash === chunk.contentHash) {
@@ -161,6 +181,7 @@ export class DiffCalculator {
       toUpdateMetadataOnlyCount,
       toDeleteChunkIds,
       skippedUnchangedCount,
+      crossDocReusedCount,
       tokensSaved,
       tokensRequired,
       estimatedCostSavingsUsd: savings.costSavedUsd,
