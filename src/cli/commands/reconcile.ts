@@ -1,31 +1,20 @@
 import pc from 'picocolors';
 import ora from 'ora';
 import { StateLedger } from '../../core/delta/ledger.js';
-import { MemoryVectorSink } from '../../sinks/memory-sink.js';
-import { QdrantVectorSink } from '../../sinks/qdrant-sink.js';
-import { PineconeVectorSink } from '../../sinks/pinecone-sink.js';
-import { MockEmbeddingProvider } from '../../core/embeddings/mock-provider.js';
-import { OpenAIEmbeddingProvider } from '../../core/embeddings/openai-provider.js';
 import { LedgerReconciler } from '../../core/sync/reconciler.js';
+import { createVectorSink, createEmbeddingProvider } from '../factory.js';
 
 export async function reconcileCommand(options: {
   repair?: boolean;
   sink?: string;
+  provider?: string;
   db?: string;
 }): Promise<void> {
   const dbPath = options.db ?? process.env.VECTORSYNC_DB_PATH ?? '.vectorsync/ledger.db';
   const ledger = new StateLedger(dbPath);
 
-  let sink =
-    options.sink === 'qdrant'
-      ? new QdrantVectorSink()
-      : options.sink === 'pinecone'
-      ? new PineconeVectorSink()
-      : new MemoryVectorSink();
-
-  let embeddingProvider = process.env.OPENAI_API_KEY
-    ? new OpenAIEmbeddingProvider()
-    : new MockEmbeddingProvider();
+  const sink = createVectorSink(options.sink);
+  const embeddingProvider = createEmbeddingProvider(options.provider);
 
   const reconciler = new LedgerReconciler(ledger, sink, embeddingProvider);
 

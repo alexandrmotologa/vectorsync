@@ -1,3 +1,4 @@
+import pg from 'pg';
 import type {
   VectorItem,
   VectorSearchResult,
@@ -9,7 +10,7 @@ export interface PgVectorOptions {
   connectionString?: string;
   tableName?: string;
   dimensions?: number;
-  // Optional executor for custom pg pool or mocking
+  // Optional executor for custom pg pool or testing
   sqlExecutor?: (sql: string, params?: unknown[]) => Promise<any>;
 }
 
@@ -17,12 +18,30 @@ export class PgVectorSink implements VectorSink {
   public readonly sinkName = 'pgvector';
   private readonly tableName: string;
   private readonly dimensions: number;
-  private readonly sqlExecutor?: (sql: string, params?: unknown[]) => Promise<any>;
+  private readonly customExecutor?: (sql: string, params?: unknown[]) => Promise<any>;
+  private pool: pg.Pool | null = null;
 
   constructor(options?: PgVectorOptions) {
     this.tableName = options?.tableName ?? 'vectorsync_vectors';
     this.dimensions = options?.dimensions ?? 1536;
-    this.sqlExecutor = options?.sqlExecutor;
+    this.customExecutor = options?.sqlExecutor;
+
+    const connStr = options?.connectionString ?? process.env.DATABASE_URL;
+    if (!this.customExecutor && connStr) {
+      this.pool = new pg.Pool({ connectionString: connStr });
+    }
+  }
+
+  private async querySql(sql: string, params?: unknown[]): Promise<any> {
+    if (this.customExecutor) {
+      return this.customExecutor(sql, params);
+    }
+    if (this.pool) {
+      return this.pool.query(sql, params);
+    }
+    throw new Error(
+      'PostgreSQL connectionString or DATABASE_URL environment variable is required for PgVectorSink.'
+    );
   }
 
   public getMigrationSql(): string {
@@ -39,12 +58,12 @@ export class PgVectorSink implements VectorSink {
     `;
   }
 
+  public async initSchema(): Promise<void> {
+    await this.querySql(this.getMigrationSql());
+  }
+
   public async upsertChunks(chunks: VectorItem[]): Promise<void> {
     if (chunks.length === 0) return;
-    if (!this.sqlExecutor) {
-      // In standalone or test mode without direct pg client, we log or no-op
-      return;
-    }
 
     for (const chunk of chunks) {
       const vectorLiteral = `[${chunk.vector.join(',')}]`;
@@ -57,7 +76,7 @@ export class PgVectorSink implements VectorSink {
           metadata = EXCLUDED.metadata,
           updated_at = NOW();
       `;
-      await this.sqlExecutor(sql, [
+      await this.querySql(sql, [
         chunk.chunkId,
         docId,
         vectorLiteral,
@@ -70,26 +89,24 @@ export class PgVectorSink implements VectorSink {
     chunkId: string,
     metadata: Record<string, unknown>
   ): Promise<void> {
-    if (!this.sqlExecutor) return;
     const sql = `
       UPDATE ${this.tableName}
       SET metadata = metadata || $1::jsonb, updated_at = NOW()
       WHERE chunk_id = $2;
     `;
-    await this.sqlExecutor(sql, [JSON.stringify(metadata), chunkId]);
+    await this.querySql(sql, [JSON.stringify(metadata), chunkId]);
   }
 
   public async deleteChunks(chunkIds: string[]): Promise<void> {
-    if (chunkIds.length === 0 || !this.sqlExecutor) return;
+    if (chunkIds.length === 0) return;
     const placeholders = chunkIds.map((_, i) => `$${i + 1}`).join(',');
     const sql = `DELETE FROM ${this.tableName} WHERE chunk_id IN (${placeholders});`;
-    await this.sqlExecutor(sql, chunkIds);
+    await this.querySql(sql, chunkIds);
   }
 
   public async deleteDocument(documentId: string): Promise<void> {
-    if (!this.sqlExecutor) return;
     const sql = `DELETE FROM ${this.tableName} WHERE document_id = $1;`;
-    await this.sqlExecutor(sql, [documentId]);
+    await this.querySql(sql, [documentId]);
   }
 
   public async query(
@@ -97,7 +114,6 @@ export class PgVectorSink implements VectorSink {
     topK: number = 5,
     filter?: Record<string, unknown>
   ): Promise<VectorSearchResult[]> {
-    if (!this.sqlExecutor) return [];
     const vectorLiteral = `[${vector.join(',')}]`;
 
     let filterClause = '';
@@ -116,7 +132,7 @@ export class PgVectorSink implements VectorSink {
       LIMIT $2;
     `;
 
-    const res = await this.sqlExecutor(sql, params);
+    const res = await this.querySql(sql, params);
     const rows = Array.isArray(res) ? res : res.rows || [];
     return rows.map((r: any) => ({
       chunkId: r.chunk_id,
@@ -126,14 +142,18 @@ export class PgVectorSink implements VectorSink {
   }
 
   public async getStats(): Promise<VectorSinkStats> {
-    if (!this.sqlExecutor) {
-      return { totalVectors: 0, sinkType: this.sinkName };
-    }
-    const res = await this.sqlExecutor(`SELECT COUNT(*) as count FROM ${this.tableName};`);
+    const res = await this.querySql(`SELECT COUNT(*) as count FROM ${this.tableName};`);
     const rows = Array.isArray(res) ? res : res.rows || [];
     return {
       totalVectors: Number(rows[0]?.count ?? 0),
       sinkType: this.sinkName,
     };
+  }
+
+  public async close(): Promise<void> {
+    if (this.pool) {
+      await this.pool.end();
+      this.pool = null;
+    }
   }
 }

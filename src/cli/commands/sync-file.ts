@@ -4,16 +4,14 @@ import pc from 'picocolors';
 import ora from 'ora';
 import { StateLedger } from '../../core/delta/ledger.js';
 import { SyncPipeline } from '../../core/sync/sync-pipeline.js';
-import { MemoryVectorSink } from '../../sinks/memory-sink.js';
-import { QdrantVectorSink } from '../../sinks/qdrant-sink.js';
-import { MockEmbeddingProvider } from '../../core/embeddings/mock-provider.js';
-import { OpenAIEmbeddingProvider } from '../../core/embeddings/openai-provider.js';
 import { DiffCalculator } from '../../core/delta/diff-calculator.js';
+import { createVectorSink, createEmbeddingProvider } from '../factory.js';
 
 export async function syncFileCommand(
   filePath: string,
   options: {
     sink?: string;
+    provider?: string;
     dryRun?: boolean;
     db?: string;
     model?: string;
@@ -40,10 +38,8 @@ export async function syncFileCommand(
   const ledger = new StateLedger(dbPath);
   const diffCalculator = new DiffCalculator(options.model ?? 'text-embedding-3-small');
 
-  let sink = options.sink === 'qdrant' ? new QdrantVectorSink() : new MemoryVectorSink();
-  let embeddingProvider = process.env.OPENAI_API_KEY
-    ? new OpenAIEmbeddingProvider()
-    : new MockEmbeddingProvider();
+  const sink = createVectorSink(options.sink);
+  const embeddingProvider = createEmbeddingProvider(options.provider);
 
   const pipeline = new SyncPipeline({
     ledger,
